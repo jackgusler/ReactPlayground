@@ -1,12 +1,9 @@
 import { useState } from "react";
-import { createPortal } from "react-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/userSlice";
 import store from "../store/store";
 
 export default function Modal() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [displayMessage, setDisplayMessage] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -19,108 +16,108 @@ export default function Modal() {
     setEmail("");
     setPhone("");
     setAddress("");
-    setDisplayMessage(false);
-    setIsOpen(true);
   };
 
   const handleSubmit = () => {
-    if (!name || !email || !phone || !address) {
-      setDisplayMessage(true);
-      return;
-    }
     dispatch(setUser({ name, email, phone, address }));
     // This is just to show the store state in the console
     console.log(store.getState());
-    setIsOpen(false);
   };
 
   return (
     <>
-      <button onClick={handleOpen}>Open Modal</button>
-      {isOpen &&
-        createPortal(
-          <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: "rgba(0, 0, 0, 0.5)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            onClick={() => setIsOpen(false)}
-          >
-            <div
-              style={{
-                background: "white",
-                padding: 20,
-                borderRadius: 5,
-                maxWidth: 500,
-                width: "100%",
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h2>User Information</h2>
-              Name:
-              <input
-                style={{
-                  width: "100%",
-                }}
-                type="text"
-                placeholder="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              Email:
-              <input
-                style={{
-                  width: "100%",
-                }}
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              Phone:
-              <input
-                style={{
-                  width: "100%",
-                }}
-                type="tel"
-                placeholder="Phone"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-              Address:
-              <input
-                style={{
-                  width: "100%",
-                }}
-                type="address"
-                placeholder="Address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginTop: 10,
-                }}
-              >
-                <button onClick={handleSubmit}>Submit</button>
-                <div style={{ color: "red" }}>
-                  {displayMessage && "Please fill all fields"}
-                </div>
+      <button
+        className="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#formModal"
+        onClick={handleOpen}
+      >
+        Open Modal
+      </button>
+
+      <div
+        className="modal fade"
+        id="formModal"
+        tabIndex="-1"
+        aria-labelledby="formModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="formModalLabel">
+                User Information
+              </h1>
+              <button
+                type="button"
+                className="btn-close custom-btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <div className="mb-1">
+                <label className="form-label custom-label">Name</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  placeholder="Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className="mb-1">
+                <label className="form-label custom-label">Email</label>
+                <input
+                  className="form-control"
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div className="mb-1">
+                <label className="form-label custom-label">Phone</label>
+                <input
+                  className="form-control"
+                  type="tel"
+                  placeholder="Phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+              </div>
+              <div className="mb-1">
+                <label className="form-label custom-label">Address</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  placeholder="Address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
               </div>
             </div>
-          </div>,
-          document.body
-        )}
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                disabled={!name || !email || !phone || !address}
+                onClick={handleSubmit}
+                data-bs-dismiss="modal"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
