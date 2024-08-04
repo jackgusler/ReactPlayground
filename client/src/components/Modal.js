@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/userSlice";
 import store from "../store/store";
+import { useNavigate } from "react-router-dom";
 
 export default function Modal() {
   const [name, setName] = useState("");
@@ -10,6 +11,7 @@ export default function Modal() {
   const [address, setAddress] = useState("");
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleOpen = () => {
     setName("");
@@ -22,6 +24,7 @@ export default function Modal() {
     dispatch(setUser({ name, email, phone, address }));
     // This is just to show the store state in the console
     console.log(store.getState());
+    navigate("/home");
   };
 
   return (
